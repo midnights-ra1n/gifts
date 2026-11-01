@@ -44,7 +44,7 @@ packaging/           fichiers du paquet : control, scripts, service systemd, ré
 Téléchargez le `.deb` depuis la page [Releases](../../releases), ou construisez-le (voir plus bas), puis :
 
 ```sh
-apt install ./cadeaux_1.0.0_all.deb
+apt install ./cadeaux_1.0.*_all.deb
 ```
 
 Le service `cadeaux` démarre tout de suite sur le port **8080**. Ouvrez `http://<ip-du-conteneur>:8080` : le premier écran crée votre compte administrateur et votre première famille. Ajoutez ensuite les autres personnes depuis **votre prénom (en haut à droite) → Réglages**, et donnez à chacune son code.
@@ -113,11 +113,7 @@ Le workflow [`.github/workflows/deb.yml`](.github/workflows/deb.yml) s'exécute 
 1. lance les tests de l'API ;
 2. construit le `.deb` ;
 3. **l'installe réellement**, vérifie que le service répond, puis teste `remove` (données gardées) et `purge` (données effacées) ;
-4. joint le `.deb` aux artefacts du run.
+4. joint le `.deb` aux artefacts du run ;
+5. sur `main` uniquement, **publie automatiquement une release** `v1.0.<n>` avec le `.deb` en pièce jointe.
 
-Pour publier une version, poussez un tag : le workflow crée la release GitHub avec le `.deb` en pièce jointe, numéroté d'après le tag.
-
-```sh
-git tag v1.1.0
-git push origin v1.1.0
-```
+Le numéro `<n>` est celui du run et ne fait qu'augmenter : `apt install` du nouveau fichier fait donc toujours une mise à jour. Pour une version marquante, changez le préfixe `1.0` dans la variable `VERSION` du workflow. Les pull requests sont testées mais ne publient rien.
