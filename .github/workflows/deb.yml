@@ -1,0 +1,56 @@
+# Construit le paquet .deb sur un runner x86_64, l'installe pour vérifier qu'il démarre,
+# et le publie dans une release GitHub quand on pousse un tag vX.Y.Z.
+name: Paquet Debian
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write  # nécessaire pour créer la release sur un tag
+
+jobs:
+  deb:
+    runs-on: ubuntu-24.04  # x86_64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tests de l'API
+        run: python3 -m unittest -v test_server
+
+      - name: Construire le .deb
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then export VERSION="${GITHUB_REF_NAME#v}"; fi
+          python3 build_deb.py
+          dpkg-deb --info cadeaux_*.deb
+          dpkg-deb --contents cadeaux_*.deb
+
+      - name: Installer et vérifier le service
+        run: |
+          sudo apt-get install -y ./cadeaux_*.deb
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8080/api/start && break; sleep 1; done
+          curl -fsS http://127.0.0.1:8080/api/start | grep -q '"setup": true'
+          systemctl is-active cadeaux
+          test -f /var/lib/cadeaux/cadeaux.db
+
+      - name: Désinstaller proprement
+        run: |
+          sudo apt-get remove -y cadeaux
+          test -f /var/lib/cadeaux/cadeaux.db  # remove garde les données
+          sudo apt-get purge -y cadeaux
+          test ! -e /var/lib/cadeaux            # purge les efface
+          ! id cadeaux
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cadeaux-deb
+          path: cadeaux_*.deb
+
+      - name: Publier la release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" cadeaux_*.deb --title "$GITHUB_REF_NAME" --generate-notes

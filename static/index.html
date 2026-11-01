@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cadeaux de Noël</title>
+  <meta name="description" content="Nos listes de cadeaux de Noël en famille">
+  <meta name="theme-color" content="#0B1130">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;800;900&family=Geist+Mono:wght@500;600&display=swap">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"><span></span><span></span></div>
+  <header class="top">
+    <span class="logo">Cadeaux<span class="dot">.</span></span>
+    <span id="who"></span>
+  </header>
+  <main id="main"><p class="lead">Chargement…</p></main>
+  <nav id="nav" aria-label="Menu principal" hidden>
+    <a href="#/liste" data-tab="liste"><span aria-hidden="true">📝</span>Ma liste</a>
+    <a href="#/offrir" data-tab="offrir"><span aria-hidden="true">🎁</span>Offrir</a>
+    <a href="#/achats" data-tab="achats"><span aria-hidden="true">🛍️</span>Mes achats</a>
+    <a href="#/changements" data-tab="changements"><span aria-hidden="true">🔔</span>Changements<b id="badge" hidden></b></a>
+  </nav>
+  <dialog id="dialog"></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

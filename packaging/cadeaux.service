@@ -1,0 +1,15 @@
+[Unit]
+Description=Cadeaux de Noël
+After=network.target
+
+[Service]
+User=cadeaux
+Environment=CADEAUX_DB=/var/lib/cadeaux/cadeaux.db
+EnvironmentFile=-/etc/default/cadeaux
+ExecStart=/usr/bin/python3 -u /opt/cadeaux/server.py
+StateDirectory=cadeaux
+Restart=on-failure
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

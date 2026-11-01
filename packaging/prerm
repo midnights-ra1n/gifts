@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+# Lors d'une mise à jour on ne coupe pas : postinst redémarre le service avec la nouvelle version.
+if [ "$1" = remove ] && [ -d /run/systemd/system ]; then
+    systemctl disable --now cadeaux.service >/dev/null || true
+fi

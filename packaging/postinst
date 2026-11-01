@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+if [ "$1" = configure ]; then
+    getent passwd cadeaux >/dev/null || \
+        useradd --system --home-dir /var/lib/cadeaux --no-create-home --shell /usr/sbin/nologin cadeaux
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload
+        systemctl enable cadeaux.service >/dev/null
+        systemctl restart cadeaux.service
+    fi
+fi

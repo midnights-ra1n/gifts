@@ -1,0 +1,11 @@
+Package: cadeaux
+Version: {version}
+Architecture: all
+Maintainer: Cadeaux <root@localhost>
+Depends: python3 (>= 3.9), systemd
+Installed-Size: {size}
+Section: web
+Priority: optional
+Description: Listes de cadeaux de Noël en famille
+ Petite application web (PWA) pour gérer les listes de cadeaux de la
+ famille : qui offre quoi, budgets par personne et cadeaux communs.

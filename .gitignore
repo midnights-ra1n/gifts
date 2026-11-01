@@ -1,0 +1,6 @@
+# Données locales (comptes et listes de la famille) : ne jamais committer
+cadeaux.db
+cadeaux.db-*
+*.deb
+__pycache__/
+.DS_Store
